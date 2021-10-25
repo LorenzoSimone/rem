@@ -119,7 +119,7 @@ int main(int argc, const char *argv[]) {
 
     long par;
     {
-        utimer ts(pol_s ? "KNNFF_S" : "KNNFF_D" + "Par ->", &par);
+        utimer ts("Par ->", &par);
 
 
         ff::parallel_for(0, n, 1, pol_s, [&dict, &n, &k, &res_pq] (long r) {

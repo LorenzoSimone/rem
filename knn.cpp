@@ -7,8 +7,8 @@
 #include <iostream>
 #include <iomanip>
 #include <queue>
-#include "../utils/readInput.cpp"
-#include "../utimer.cpp"
+#include "utils/readInput.cpp"
+#include "utimer.cpp"
 #include <thread>
 #include <cmath>
 #include <cstring>

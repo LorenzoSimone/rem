@@ -10,8 +10,8 @@
 #include <chrono>
 #include <thread>
 #include <queue>
-#include "../utimer.cpp"
-#include "../utils/readInput.cpp"
+#include "utimer.cpp"
+#include "utils/readInput.cpp"
 
 
 using namespace std;

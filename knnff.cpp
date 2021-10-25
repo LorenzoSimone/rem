@@ -5,7 +5,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-#include "../utimer.cpp"
+#include "utimer.cpp"
 #include <thread>
 #include <cstdlib>
 #include <chrono>

@@ -1,3 +1,23 @@
+/*
+ * This file is part of {PDS: Investigating an unblocking parallel
+ * implementation for the K-NN algorithm}.
+ *
+ * Developed for the PDS21 project application on K-NN algorithm.
+ *
+ * Sequential implementation
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ */
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -28,7 +48,7 @@ float distance(pair<float, float> x1, pair<float, float> x2) {
 int main(int argc, const char *argv[]) {
 
     if (argc < 2) {
-        cerr << "Use: k | nw" << endl;
+        cerr << "Use: k" << endl;
         return -1;
     }
 
@@ -39,6 +59,11 @@ int main(int argc, const char *argv[]) {
     int n = dict.size();
 
     vector <  priority_queue<pairfii> > seq_pq(n, priority_queue <pairfii>());
+    vector < string >  closest (n, "");
+
+    ofstream outfile;
+    outfile.open("outputSEQ.csv", fstream::out);
+
 
     long seq;
     {
@@ -47,7 +72,8 @@ int main(int argc, const char *argv[]) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 float dis = distance(dict[i], dict[j]);
-                if (j < k) {
+
+                if (seq_pq[i].size() < k && i != j) {
                     seq_pq[i].push(make_pair(dis, make_pair(i, j)));
                 }
                 else {
@@ -57,16 +83,29 @@ int main(int argc, const char *argv[]) {
                     }
                 }
             }
-        }
 
+            outfile << i << " ";
+            while (!seq_pq[i].empty())
+            {
+                closest[i] += to_string(seq_pq[i].top().second.second) + ",";
+                seq_pq[i].pop();
+            }
+
+            closest[i].pop_back();
+            reverse(closest[i].begin(), closest[i].end());
+            outfile << closest[i] << endl;
+        }
+        outfile.close();
     }
+
+    /**
+    * Building a csv appending the results
+    * for statistical purposes
+    **/
 
     ofstream resfile;
     resfile.open("res.csv", ios_base::app);
 
-    //cout << "Summary S(" << nw << ") = " << (float)(seq) / (float)(par_1 + par_2 + par_3) << endl;
-    //cout << "------HEADER------" << endl;
-    //cout << "label, n, k, nw, s1, s2, s3, tot" << endl;
     for (int w : workers) {
         resfile
                 << "seq" << ","
